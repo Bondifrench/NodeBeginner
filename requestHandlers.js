@@ -1,15 +1,16 @@
 #!/usr/bin/env node
 "use strict";
+var fs = require("fs");
 
-var exec = require("child_process").exec;
+var filename = "./index.html";
+var buf = fs.readFileSync(filename, "utf-8");
 
 function start (resp) {
 	console.log("Request Handler 'Start' was called");
-	exec("find /", {timeout: 10000, maxBuffer: 2000*1024 }, function (error, stdout, stderr) {
-		resp.writeHead(200, {"Content-Type":"text/plain"});
-		resp.write(stdout);
-		resp.end();
-	});
+
+	resp.writeHead(200, {"Content-Type":"text/html"});
+	resp.write(buf);
+	resp.end();
 }
 function upload (resp) {
 	console.log("Request Handler 'Upload' was called");
