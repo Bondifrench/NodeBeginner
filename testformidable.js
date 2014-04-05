@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 "use strict";
 
-var formidable = require("formidable"),	http = require("http"),	util = require("util");
+var formidable = require("formidable"),	http = require("http"),	util = require("util"), fs = require("fs");
+var filename = "./index.html";
 
 http.createServer(function (req, res) {
 	if (req.url == "/upload" && req.method.toLowerCase() == "post") {
@@ -14,12 +15,10 @@ http.createServer(function (req, res) {
 		return;
 	}
 	res.writeHead(200, {"Content-type": "text/html"});
-	res.end(
-		'<form action="/upload" enctype="multipart/form-data"'+
-		'method="post">'+
-		'<input type="text" name="title"> <br>'+
-		'<input type="file" name="upload" multiple="multiple" value="Choose only one file"><br>'+
-		'<input type="submit" value="upload">'+
-		'</form>'
-		);
+	fs.readFile(filename,"utf8", function (err, data) {
+		if (err) throw err;
+		res.write(data);
+		res.end();
+	});
+	
 }).listen(8888);
